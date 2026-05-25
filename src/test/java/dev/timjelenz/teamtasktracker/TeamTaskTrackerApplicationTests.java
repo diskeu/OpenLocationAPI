@@ -1,0 +1,13 @@
+package dev.timjelenz.teamtasktracker;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class TeamTaskTrackerApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
