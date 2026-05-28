@@ -1,6 +1,6 @@
 spring:
   application:
-    name: team-task-tracker
+    name: team-tasktracker
 
   server:
     port: 8080

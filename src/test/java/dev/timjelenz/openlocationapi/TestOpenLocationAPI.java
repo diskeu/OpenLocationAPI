@@ -1,10 +1,10 @@
-package dev.timjelenz.teamtasktracker;
+package dev.timjelenz.openlocationapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TeamTaskTrackerApplicationTests {
+class OpenLocationAPITests {
 
   @Test
   void contextLoads() {}
