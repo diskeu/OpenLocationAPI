@@ -17,13 +17,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "Users")
 public class User {
-    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(
-        name = "UserName",
         length = 64,
         unique = true,
         nullable = false
@@ -31,7 +29,6 @@ public class User {
     private String userName;
 
     @Column(
-        name = "UserEmail",
         length = 255,
         unique = true,
         nullable = false
@@ -39,7 +36,6 @@ public class User {
     private String userEmail;
 
     @Column(
-        name = "UserPasswordHash",
         nullable = false
     )
     private byte[] userPasswordHash;

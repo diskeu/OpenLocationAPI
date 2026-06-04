@@ -17,13 +17,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "Locations")
 public class Location {
-    @Column(name = "Id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(
-        name = "LocationName",
         length = 255,
         unique = true,
         nullable = false
@@ -31,7 +29,6 @@ public class Location {
     private String locationName;
 
     @Column(
-        name = "IANAName",
         length = 48,
         unique = true,
         nullable = false
