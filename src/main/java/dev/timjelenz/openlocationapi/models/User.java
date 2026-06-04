@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Entity representing the Users table
+ * Entity representing the Users table.
  */
 @Getter
 @Setter
@@ -24,23 +24,23 @@ public class User {
 
     @Column(
         name = "UserName",
-        length=64,
-        unique=true,
-        nullable=false
+        length = 64,
+        unique = true,
+        nullable = false
     )
     private String userName;
 
     @Column(
-        name= "UserEmail",
-        length=255,
-        unique=true,
-        nullable=false
+        name = "UserEmail",
+        length = 255,
+        unique = true,
+        nullable = false
     )
     private String userEmail;
 
     @Column(
         name = "UserPasswordHash",
-        nullable=false
+        nullable = false
     )
     private byte[] userPasswordHash;
 }
