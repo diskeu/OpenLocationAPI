@@ -11,7 +11,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-      naming.pysical-strategy: org.hibernate.boot.model.naming.PysicalNamingStrategyStandardImpl
+      naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     database-platform: org.hibernate.dialect.SQLServerDialect
   
