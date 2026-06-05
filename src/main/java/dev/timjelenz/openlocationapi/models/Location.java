@@ -21,6 +21,19 @@ import lombok.Setter;
 @Entity
 @Table(name = "Locations")
 public class Location {
+    /**
+     * Protected constructor for Hibernate.
+     */
+    protected Location() { }
+
+    /**
+     * Constructor to initalize the columns directly.
+     */
+    public Location(String locationName, String ianaName) {
+        this.locationName = locationName;
+        this.ianaName = ianaName;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

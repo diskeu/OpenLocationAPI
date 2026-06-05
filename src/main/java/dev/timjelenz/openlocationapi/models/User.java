@@ -23,6 +23,20 @@ import lombok.Setter;
 @Entity
 @Table(name = "Users")
 public class User {
+    /**
+     * Protected constructor for Hibernate.
+     */
+    protected User() { }
+    
+    /**
+     * Constructor to initalize the columns directly.
+     */
+    public User(String userName, String userEmail, byte[] userPasswordHash) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPasswordHash = userPasswordHash;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

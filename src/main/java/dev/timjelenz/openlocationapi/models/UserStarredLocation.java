@@ -18,6 +18,19 @@ import lombok.Setter;
 @Entity
 @Table(name = "UserStarredLocations")
 public class UserStarredLocation {
+    /**
+     * Protected constructor for Hibernate.
+     */
+    protected UserStarredLocation() { }
+
+    /**
+     * Constructor to initalize the columns directly.
+     */
+    public UserStarredLocation(User user, Location location) {
+        this.user = user;
+        this.location = location;
+    }
+
     @EmbeddedId
     private UserIdLocationId userIdLocationId;
 

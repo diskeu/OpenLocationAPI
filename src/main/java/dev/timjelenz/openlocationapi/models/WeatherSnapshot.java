@@ -34,6 +34,35 @@ import lombok.Setter;
     )
 )
 public class WeatherSnapshot {
+    /**
+     * Protected constructor for Hibernate.
+     */
+    protected WeatherSnapshot() { }
+
+    /**
+     * Constructor to initalize the columns directly.
+     */
+    public WeatherSnapshot(
+            Location location,
+            LocalDateTime snapshotTime,
+            BigDecimal temperatureC,
+            BigDecimal windKMH,
+            short humidity,
+            short uv,
+            LocalDateTime sourceLastUpdated,
+            short apiConditionalCode,
+            String rawJSON
+    ) {
+        this.location = location;
+        this.snapshotTime = snapshotTime;
+        this.temperatureC = temperatureC;
+        this.windKMH = windKMH;
+        this.humidity = humidity;
+        this.uv = uv;
+        this.sourceLastUpdated = sourceLastUpdated;
+        this.apiConditionalCode = apiConditionalCode;
+        this.rawJSON = rawJSON;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
