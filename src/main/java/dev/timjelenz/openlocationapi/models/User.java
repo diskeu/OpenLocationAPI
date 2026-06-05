@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +32,7 @@ public class User {
         unique = true,
         nullable = false
     )
+    @Size(min = 4, max = 64)
     private String userName;
 
     @Column(
@@ -37,6 +40,7 @@ public class User {
         unique = true,
         nullable = false
     )
+    @Email
     private String userEmail;
 
     @Column(nullable = false, length = 255)
