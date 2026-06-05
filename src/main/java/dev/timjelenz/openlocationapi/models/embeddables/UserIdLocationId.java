@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Composite Primary key for `UserId` and `LocationId`.
  */
+@Getter
+@Setter
 @Embeddable
 public class UserIdLocationId implements Serializable {
     private int userId;
