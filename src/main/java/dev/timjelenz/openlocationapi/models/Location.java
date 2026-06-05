@@ -41,4 +41,7 @@ public class Location {
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.REMOVE)
     private List<UserStarredLocation> userStarredLocations;
+
+    @OneToMany(mappedBy ="location", cascade = CascadeType.REMOVE)
+    private List<WeatherSnapshot> weatherSnapshots;
 }
