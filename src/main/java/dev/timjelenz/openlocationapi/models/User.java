@@ -39,7 +39,7 @@ public class User {
     )
     private String userEmail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private byte[] userPasswordHash;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
