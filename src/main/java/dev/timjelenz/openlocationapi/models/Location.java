@@ -17,7 +17,6 @@ import lombok.Setter;
  * Locations entity.
  */
 @Getter
-@Setter
 @Entity
 @Table(name = "Locations")
 public class Location {
@@ -38,6 +37,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Setter
     @Column(
         length = 255,
         unique = true,
@@ -45,6 +45,7 @@ public class Location {
     )
     private String locationName;
 
+    @Setter
     @Column(
         length = 48,
         unique = true,

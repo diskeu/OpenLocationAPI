@@ -14,7 +14,6 @@ import lombok.Setter;
  * Entity for UserStarredLocation table.
  */
 @Getter
-@Setter
 @Entity
 @Table(name = "UserStarredLocations")
 public class UserStarredLocation {
@@ -34,11 +33,13 @@ public class UserStarredLocation {
     @EmbeddedId
     private UserIdLocationId userIdLocationId;
 
+    @Setter
     @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "UserId", nullable = false)
     private User user;
 
+    @Setter
     @ManyToOne()
     @MapsId("locationId")
     @JoinColumn(name = "LocationId", nullable = false)

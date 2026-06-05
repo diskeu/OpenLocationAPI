@@ -25,7 +25,6 @@ import lombok.Setter;
  * Entity for `WeatherSnapshots` table.
  */
 @Getter
-@Setter
 @Entity
 @Table(
     name = "WeatherSnapshots",
@@ -67,38 +66,48 @@ public class WeatherSnapshot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Setter
     @ManyToOne
     @JoinColumn(name = "LocationId", nullable = false)
     private Location location;
-
+    
+    @Setter
     @Column(name = "SnapshotTime", nullable = false)
     private LocalDateTime snapshotTime;
 
+    @Setter
     @Column(nullable = false)
     private LocalDateTime localTime;
 
+    @Setter
     @Column(precision = 4, scale = 1, nullable = false)
     private BigDecimal temperatureC;
-
+    
+    @Setter
     @Column(precision = 5, scale = 1, nullable = false)
     private BigDecimal windKMH;
 
+    @Setter
     @Column(nullable = false)
     @Min(0)
     @Max(100)
     private short humidity;
 
+    @Setter
     @Column(nullable = false)
     @Min(0)
     @Max(24)
     private short uv;
 
+    @Setter
     @Column(nullable = false)
     private LocalDateTime sourceLastUpdated;
 
+    @Setter
     @Column(nullable = false)
     private short apiConditionalCode;
 
+    @Setter
     @Lob
     @Nationalized
     @Column(nullable = false)

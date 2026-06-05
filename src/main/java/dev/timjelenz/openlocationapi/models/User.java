@@ -19,7 +19,6 @@ import lombok.Setter;
  * Entity representing the Users table.
  */
 @Getter
-@Setter
 @Entity
 @Table(name = "Users")
 public class User {
@@ -41,6 +40,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Setter
     @Column(
         length = 64,
         unique = true,
@@ -49,6 +49,7 @@ public class User {
     @Size(min = 4, max = 64)
     private String userName;
 
+    @Setter
     @Column(
         length = 255,
         unique = true,
@@ -57,6 +58,7 @@ public class User {
     @Email
     private String userEmail;
 
+    @Setter
     @Column(nullable = false, length = 255)
     private byte[] userPasswordHash;
 
