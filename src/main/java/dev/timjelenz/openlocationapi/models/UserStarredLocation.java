@@ -31,7 +31,7 @@ public class UserStarredLocation {
     }
 
     @EmbeddedId
-    private UserIdLocationId userIdLocationId;
+    private UserIdLocationId id;
 
     @Setter
     @ManyToOne
