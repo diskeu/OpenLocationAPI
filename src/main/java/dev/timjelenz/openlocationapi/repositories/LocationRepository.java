@@ -7,7 +7,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import dev.timjelenz.openlocationapi.models.Location;
 
 public interface LocationRepository extends JpaRepository<Location, Integer> {
+    /**
+     * Find Location with the given name.
+     *
+     * @param locationName name of the Location
+     * @return a optional containing a location if one was found
+     */
     Optional<Location> findByLocationName(String locationName);
 
+    /**
+     * Find Location with the given `IANA` name.
+     *
+     * @param ianaName `IANA` name of the Location
+     * @return a optional containing a location if one was found
+     */
     Optional<Location> findByIanaName(String ianaName);
 }

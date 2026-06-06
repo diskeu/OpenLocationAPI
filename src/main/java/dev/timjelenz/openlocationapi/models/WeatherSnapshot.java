@@ -40,17 +40,28 @@ public class WeatherSnapshot {
 
     /**
      * Constructor to initalize the columns directly.
+     *
+     * @param location location of the captured weather in the snapshot
+     * @param snapshotTime time when the snapshot was taken
+     * @param temperatureC temperature (Celcius)
+     * @param windKMH wind speed (KMH)
+     * @param humidity humidity
+     * @param uv uv index
+     * @param sourceLastUpdated when the weather information got updated the
+     * last time in the API
+     * @param apiConditionalCode conditional code from the API
+     * @param rawJSON raw json of the weather API respone
      */
     public WeatherSnapshot(
-            Location location,
-            LocalDateTime snapshotTime,
-            BigDecimal temperatureC,
-            BigDecimal windKMH,
-            short humidity,
-            short uv,
-            LocalDateTime sourceLastUpdated,
-            short apiConditionalCode,
-            String rawJSON
+            final Location location,
+            final LocalDateTime snapshotTime,
+            final BigDecimal temperatureC,
+            final BigDecimal windKMH,
+            final short humidity,
+            final short uv,
+            final LocalDateTime sourceLastUpdated,
+            final short apiConditionalCode,
+            final String rawJSON
     ) {
         this.location = location;
         this.snapshotTime = snapshotTime;
@@ -70,7 +81,7 @@ public class WeatherSnapshot {
     @ManyToOne
     @JoinColumn(name = "LocationId", nullable = false)
     private Location location;
-    
+
     @Setter
     @Column(name = "SnapshotTime", nullable = false)
     private LocalDateTime snapshotTime;
@@ -82,7 +93,7 @@ public class WeatherSnapshot {
     @Setter
     @Column(precision = 4, scale = 1, nullable = false)
     private BigDecimal temperatureC;
-    
+
     @Setter
     @Column(precision = 5, scale = 1, nullable = false)
     private BigDecimal windKMH;

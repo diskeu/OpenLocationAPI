@@ -27,8 +27,11 @@ public class Location {
 
     /**
      * Constructor to initalize the columns directly.
+     *
+     * @param locationName name of the location
+     * @param ianaName the `IANA` name of the location
      */
-    public Location(String locationName, String ianaName) {
+    public Location(final String locationName, final String ianaName) {
         this.locationName = locationName;
         this.ianaName = ianaName;
     }

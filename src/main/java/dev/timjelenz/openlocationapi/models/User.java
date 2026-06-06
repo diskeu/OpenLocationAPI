@@ -26,11 +26,19 @@ public class User {
      * Protected constructor for Hibernate.
      */
     protected User() { }
-    
+
     /**
      * Constructor to initalize the columns directly.
+     *
+     * @param userName name of the user
+     * @param userEmail email of the user
+     * @param userPasswordHash 255 Byte hash of the user's password
      */
-    public User(String userName, String userEmail, byte[] userPasswordHash) {
+    public User(
+        final String userName,
+        final String userEmail,
+        final byte[] userPasswordHash
+    ) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.userPasswordHash = userPasswordHash;

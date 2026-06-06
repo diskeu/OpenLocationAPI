@@ -24,8 +24,11 @@ public class UserStarredLocation {
 
     /**
      * Constructor to initalize the columns directly.
+     *
+     * @param user the user mapping to a column in the User table
+     * @param location the location mapping to a column in the Location table
      */
-    public UserStarredLocation(User user, Location location) {
+    public UserStarredLocation(final User user, final Location location) {
         this.user = user;
         this.location = location;
     }
