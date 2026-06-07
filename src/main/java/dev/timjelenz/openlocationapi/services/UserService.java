@@ -6,8 +6,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.timjelenz.openlocationapi.dto.requests.CreateUserRequest;
+import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
 import dev.timjelenz.openlocationapi.models.User;
 import dev.timjelenz.openlocationapi.repositories.UserRepository;
+import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
 
 /**
  * User Service.
@@ -31,7 +33,7 @@ public class UserService {
         final String userName = createUserRequest.username();
 
         if (userRepository.findByUserName(userName).isPresent()) {
-            throw new RuntimeException("User already Exists");
+            throw new UserAlreadyExists("User already Exists");
         }
         User user = new User(
             userName,
