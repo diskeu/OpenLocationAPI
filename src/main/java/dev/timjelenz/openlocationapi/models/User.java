@@ -32,12 +32,12 @@ public class User {
      *
      * @param userName name of the user
      * @param userEmail email of the user
-     * @param userPasswordHash 255 Byte hash of the user's password
+     * @param userPasswordHash hash of the user's password
      */
     public User(
         final String userName,
         final String userEmail,
-        final byte[] userPasswordHash
+        final String userPasswordHash
     ) {
         this.userName = userName;
         this.userEmail = userEmail;
@@ -68,7 +68,7 @@ public class User {
 
     @Setter
     @Column(nullable = false, length = 255)
-    private byte[] userPasswordHash;
+    private String userPasswordHash;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<UserStarredLocation> userStarredLocations;
