@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import dev.timjelenz.openlocationapi.models.User;
 
 @Service
-public class SecurityCurrentUserProvider implements CurrentUserProvider {
+public final class SecurityCurrentUserProvider implements CurrentUserProvider {
     @Override
     public User get() {
         return (User) SecurityContextHolder.getContext()

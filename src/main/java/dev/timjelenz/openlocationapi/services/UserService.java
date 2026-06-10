@@ -1,15 +1,16 @@
 package dev.timjelenz.openlocationapi.services;
 
-import java.nio.charset.StandardCharsets;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.timjelenz.openlocationapi.dto.requests.CreateUserRequest;
+import dev.timjelenz.openlocationapi.dto.responses.user.PrivateUserResponse;
+import dev.timjelenz.openlocationapi.dto.responses.user.PublicUserResponse;
 import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
+import dev.timjelenz.openlocationapi.exceptions.service.user.UserNotFound;
 import dev.timjelenz.openlocationapi.models.User;
 import dev.timjelenz.openlocationapi.repositories.UserRepository;
-import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
+import dev.timjelenz.openlocationapi.security.CurrentUserProvider;
 
 /**
  * User Service.
@@ -18,22 +19,28 @@ import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CurrentUserProvider currentUserProvider;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(
+        final UserRepository userRepository,
+        final PasswordEncoder passwordEncoder,
+        final CurrentUserProvider currentUserProvider
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.currentUserProvider = currentUserProvider;
     }
-    
+
     /**
      * Creates and inserts user into db.
-     * 
+     *
      * @param createUserRequest will be used to create the User
      */
-    public void createUser(CreateUserRequest createUserRequest) {
+    public void createUser(final CreateUserRequest createUserRequest) {
         final String userName = createUserRequest.username();
 
         if (userRepository.findByUserName(userName).isPresent()) {
-            throw new UserAlreadyExists("User already Exists");
+            throw new UserAlreadyExists();
         }
         User user = new User(
             userName,
@@ -41,5 +48,56 @@ public class UserService {
             passwordEncoder.encode(createUserRequest.plainPassword())
         );
         userRepository.save(user);
+    }
+
+    private PublicUserResponse mapToPublic(final User user) {
+        return new PublicUserResponse(user);
+    }
+
+    /**
+     * Gets the public user DTO via id.
+     *
+     * @param id the user's id
+     * @return a public user response DTO
+     */
+    public PublicUserResponse getUserById(final int id) {
+        return mapToPublic(
+            userRepository.findById(id)
+                .orElseThrow(UserNotFound::new)
+        );
+    }
+
+    /**
+     * Gets the public user DTO via userName.
+     *
+     * @param userName the userName
+     * @return a public user response DTO
+     */
+    public PublicUserResponse getUserByName(final String userName) {
+        return mapToPublic(
+            userRepository.findByUserName(userName)
+                .orElseThrow(UserNotFound::new)
+        );
+    }
+
+    /**
+     * Gets the private user DTO.
+     *
+     * @return a private user response DTO
+     */
+    public PrivateUserResponse getPrivateUser() {
+        return new PrivateUserResponse(
+            currentUserProvider.get()
+        );
+    }
+
+    /**
+     * Deletes the current user.
+     */
+    public void deleteUser() {
+        currentUserProvider.get();
+        userRepository.deleteById(
+            currentUserProvider.get().getId()
+        );
     }
 }

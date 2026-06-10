@@ -1,9 +1,10 @@
 package dev.timjelenz.openlocationapi.exceptions.service.user;
 
 public class UserAlreadyExists extends RuntimeException {
-    UserAlreadyExists() { }
 
-    public UserAlreadyExists(String msg) {
+    public UserAlreadyExists() { }
+
+    public UserAlreadyExists(final String msg) {
         super(msg);
     }
 }
