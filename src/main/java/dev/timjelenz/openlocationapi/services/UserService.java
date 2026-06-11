@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.timjelenz.openlocationapi.dto.requests.CreateUserRequest;
+import dev.timjelenz.openlocationapi.dto.requests.UpdateUserAppereanceRequest;
 import dev.timjelenz.openlocationapi.dto.responses.user.PrivateUserResponse;
 import dev.timjelenz.openlocationapi.dto.responses.user.PublicUserResponse;
 import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
@@ -11,6 +12,7 @@ import dev.timjelenz.openlocationapi.exceptions.service.user.UserNotFound;
 import dev.timjelenz.openlocationapi.models.User;
 import dev.timjelenz.openlocationapi.repositories.UserRepository;
 import dev.timjelenz.openlocationapi.security.CurrentUserProvider;
+import jakarta.transaction.Transactional;
 
 /**
  * User Service.
@@ -99,5 +101,17 @@ public class UserService {
         userRepository.deleteById(
             currentUserProvider.get().getId()
         );
+    }
+    /**
+     * Update the current user.
+     * @param UpdateUserRequest the update request
+     */
+    @Transactional
+    public void updateUser(final UpdateUserAppereanceRequest updateUserRequest) { 
+        // Relevant if more fields to the user get added
+        currentUserProvider.get()
+            .setUserName(
+                updateUserRequest.username()
+            );
     }
 }
