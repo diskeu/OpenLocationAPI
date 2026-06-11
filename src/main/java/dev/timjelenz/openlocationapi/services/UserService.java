@@ -7,6 +7,8 @@ import dev.timjelenz.openlocationapi.dto.requests.CreateUserRequest;
 import dev.timjelenz.openlocationapi.dto.requests.UpdateUserAppereanceRequest;
 import dev.timjelenz.openlocationapi.dto.responses.user.PrivateUserResponse;
 import dev.timjelenz.openlocationapi.dto.responses.user.PublicUserResponse;
+import dev.timjelenz.openlocationapi.exceptions.service.IdentUpdate;
+import dev.timjelenz.openlocationapi.exceptions.service.user.InvalidCredentials;
 import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
 import dev.timjelenz.openlocationapi.exceptions.service.user.UserNotFound;
 import dev.timjelenz.openlocationapi.models.User;
@@ -113,5 +115,29 @@ public class UserService {
             .setUserName(
                 updateUserRequest.username()
             );
+    }
+    /**
+     * Update the user Password.
+     * 
+     * @param password the old password
+     * @param newPassword the newPassword which updates the old one
+     */
+    @Transactional
+    public void updatePassword(String password, String newPassword) {
+        if (password.equals(newPassword)) {
+            throw new IdentUpdate();
+        }
+        User user = currentUserProvider.get();
+
+        User dbUser = userRepository.findById(user.getId())
+            .orElseThrow(UserNotFound::new);
+
+        if (!passwordEncoder.matches(password, dbUser.getUserPasswordHash())) {
+            throw new InvalidCredentials();
+        }
+        dbUser.setUserPasswordHash(
+            passwordEncoder.encode(newPassword)
+        );
+        // TODO: send verification email
     }
 }
