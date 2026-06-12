@@ -117,7 +117,7 @@ public class UserService {
             );
     }
     /**
-     * Update the user Password.
+     * Update the user's Password.
      * 
      * @param password the old password
      * @param newPassword the newPassword which updates the old one
@@ -139,5 +139,27 @@ public class UserService {
             passwordEncoder.encode(newPassword)
         );
         // TODO: send verification email
+    }
+    /**
+     * Update the user's email.
+     * 
+     * @param password the password for verification pruposes
+     * @param newEmail the new email which updates the old one
+     */
+    @Transactional
+    public void updateEmail(String password, String newEmail) {
+        User user = currentUserProvider.get();
+
+        if (user.getUserEmail().equals(newEmail)) {
+            throw new IdentUpdate();
+        }
+        User dbUser = userRepository.findById(user.getId())
+            .orElseThrow(UserNotFound::new);
+
+        if (!passwordEncoder.matches(password, dbUser.getUserPasswordHash())) {
+            throw new InvalidCredentials();
+        }
+        dbUser.setUserEmail(newEmail);
+        // TODO: send verification email to new email
     }
 }
