@@ -70,7 +70,17 @@ public class UserService {
     }
 
     /**
+     * Gets the user entity via name.
      * 
+     * @param name the user's name
+     * @return the user entity
+     */
+    User getUserEntityByName(final String name) {
+        return userRepository.findByUserName(name)
+            .orElseThrow(UserNotFound::new);
+    }
+
+    /**
      * Gets the public user DTO via id.
      *
      * @param id the user's id
