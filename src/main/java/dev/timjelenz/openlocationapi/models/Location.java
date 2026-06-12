@@ -1,5 +1,6 @@
 package dev.timjelenz.openlocationapi.models;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +20,14 @@ import lombok.Setter;
  */
 @Getter
 @Entity
-@Table(name = "Locations")
+@Table(
+    name = "Locations",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            columnNames = {"latitude", "longitude"}
+        )
+    }
+)
 public class Location {
     /**
      * Protected constructor for Hibernate.
@@ -55,6 +64,14 @@ public class Location {
         nullable = false
     )
     private String ianaName;
+
+    @Setter
+    @Column(precision = 6, scale = 3)
+    private BigDecimal latitude;
+
+    @Setter
+    @Column(precision = 6, scale = 3)
+    private BigDecimal longitude;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.REMOVE)
     private List<UserStarredLocation> userStarredLocations;
