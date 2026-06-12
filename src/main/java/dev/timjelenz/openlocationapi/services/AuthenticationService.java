@@ -2,7 +2,7 @@ package dev.timjelenz.openlocationapi.services;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import dev.timjelenz.openlocationapi.exceptions.service.user.InvalidCredentials;
+import dev.timjelenz.openlocationapi.exceptions.service.user.InvalidCredentialsException;
 import dev.timjelenz.openlocationapi.models.User;
 
 public class AuthenticationService {
@@ -29,7 +29,7 @@ public class AuthenticationService {
         User user = userService.getUserEntityByName(userName);
 
         if (!passwordEncoder.matches(password, user.getUserPasswordHash())) {
-            throw new InvalidCredentials();
+            throw new InvalidCredentialsException();
         }
         return user;
     }

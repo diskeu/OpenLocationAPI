@@ -7,10 +7,10 @@ import dev.timjelenz.openlocationapi.dto.requests.CreateUserRequest;
 import dev.timjelenz.openlocationapi.dto.requests.UpdateUserAppereanceRequest;
 import dev.timjelenz.openlocationapi.dto.responses.user.PrivateUserResponse;
 import dev.timjelenz.openlocationapi.dto.responses.user.PublicUserResponse;
-import dev.timjelenz.openlocationapi.exceptions.service.IdentUpdate;
-import dev.timjelenz.openlocationapi.exceptions.service.user.InvalidCredentials;
-import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExists;
-import dev.timjelenz.openlocationapi.exceptions.service.user.UserNotFound;
+import dev.timjelenz.openlocationapi.exceptions.service.IdentUpdateException;
+import dev.timjelenz.openlocationapi.exceptions.service.user.InvalidCredentialsException;
+import dev.timjelenz.openlocationapi.exceptions.service.user.UserAlreadyExistsException;
+import dev.timjelenz.openlocationapi.exceptions.service.user.UserNotFoundException;
 import dev.timjelenz.openlocationapi.models.User;
 import dev.timjelenz.openlocationapi.repositories.UserRepository;
 import dev.timjelenz.openlocationapi.security.CurrentUserProvider;
@@ -44,7 +44,7 @@ public class UserService {
         final String userName = createUserRequest.username();
 
         if (userRepository.findByUserName(userName).isPresent()) {
-            throw new UserAlreadyExists();
+            throw new UserAlreadyExistsException();
         }
         User user = new User(
             userName,
@@ -66,7 +66,7 @@ public class UserService {
      */
     User getUserEntityById(final int id) {
         return userRepository.findById(id)
-            .orElseThrow(UserNotFound::new);
+            .orElseThrow(UserNotFoundException::new);
     }
 
     /**
@@ -77,7 +77,7 @@ public class UserService {
      */
     User getUserEntityByName(final String name) {
         return userRepository.findByUserName(name)
-            .orElseThrow(UserNotFound::new);
+            .orElseThrow(UserNotFoundException::new);
     }
 
     /**
@@ -89,7 +89,7 @@ public class UserService {
     public PublicUserResponse getUserById(final int id) {
         return mapToPublic(
             userRepository.findById(id)
-                .orElseThrow(UserNotFound::new)
+                .orElseThrow(UserNotFoundException::new)
         );
     }
 
@@ -102,7 +102,7 @@ public class UserService {
     public PublicUserResponse getUserByName(final String userName) {
         return mapToPublic(
             userRepository.findByUserName(userName)
-                .orElseThrow(UserNotFound::new)
+                .orElseThrow(UserNotFoundException::new)
         );
     }
 
@@ -149,15 +149,15 @@ public class UserService {
     @Transactional
     public void updatePassword(final String password, final String newPassword) {
         if (password.equals(newPassword)) {
-            throw new IdentUpdate();
+            throw new IdentUpdateException();
         }
         final User user = currentUserProvider.get();
 
         final User dbUser = userRepository.findById(user.getId())
-            .orElseThrow(UserNotFound::new);
+            .orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(password, dbUser.getUserPasswordHash())) {
-            throw new InvalidCredentials();
+            throw new InvalidCredentialsException();
         }
         dbUser.setUserPasswordHash(
             passwordEncoder.encode(newPassword)
@@ -176,13 +176,13 @@ public class UserService {
         final User user = currentUserProvider.get();
 
         if (user.getUserEmail().equals(newEmail)) {
-            throw new IdentUpdate();
+            throw new IdentUpdateException();
         }
         final User dbUser = userRepository.findById(user.getId())
-            .orElseThrow(UserNotFound::new);
+            .orElseThrow(UserNotFoundException::new);
 
         if (!passwordEncoder.matches(password, dbUser.getUserPasswordHash())) {
-            throw new InvalidCredentials();
+            throw new InvalidCredentialsException();
         }
         dbUser.setUserEmail(newEmail);
         // TODO: send verification email to new email
