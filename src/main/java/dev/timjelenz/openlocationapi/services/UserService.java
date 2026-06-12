@@ -123,13 +123,13 @@ public class UserService {
      * @param newPassword the newPassword which updates the old one
      */
     @Transactional
-    public void updatePassword(String password, String newPassword) {
+    public void updatePassword(final String password, final String newPassword) {
         if (password.equals(newPassword)) {
             throw new IdentUpdate();
         }
-        User user = currentUserProvider.get();
+        final User user = currentUserProvider.get();
 
-        User dbUser = userRepository.findById(user.getId())
+        final User dbUser = userRepository.findById(user.getId())
             .orElseThrow(UserNotFound::new);
 
         if (!passwordEncoder.matches(password, dbUser.getUserPasswordHash())) {
@@ -147,13 +147,13 @@ public class UserService {
      * @param newEmail the new email which updates the old one
      */
     @Transactional
-    public void updateEmail(String password, String newEmail) {
-        User user = currentUserProvider.get();
+    public void updateEmail(final String password, final String newEmail) {
+        final User user = currentUserProvider.get();
 
         if (user.getUserEmail().equals(newEmail)) {
             throw new IdentUpdate();
         }
-        User dbUser = userRepository.findById(user.getId())
+        final User dbUser = userRepository.findById(user.getId())
             .orElseThrow(UserNotFound::new);
 
         if (!passwordEncoder.matches(password, dbUser.getUserPasswordHash())) {
