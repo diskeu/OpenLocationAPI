@@ -4,17 +4,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import dev.timjelenz.openlocationapi.exceptions.service.user.InvalidCredentials;
 import dev.timjelenz.openlocationapi.models.User;
-import dev.timjelenz.openlocationapi.repositories.UserRepository;
 
 public class AuthenticationService {
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     public AuthenticationService(
-        final UserRepository userRepository,
+        final UserService userService,
         final PasswordEncoder passwordEncoder
     ) {
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -26,13 +25,8 @@ public class AuthenticationService {
      * @return user
      * @throws if the userName or the password is incorrect
      */
-    public User authenticate(
-        final String userName,
-        final String password
-    ) throws InvalidCredentials {
-        User user = userRepository
-            .findByUserName(userName)
-            .orElseThrow(InvalidCredentials::new);
+    public User authenticate(final String userName, final String password) {
+        User user = userService.getUserEntityByName(userName);
 
         if (!passwordEncoder.matches(password, user.getUserPasswordHash())) {
             throw new InvalidCredentials();
