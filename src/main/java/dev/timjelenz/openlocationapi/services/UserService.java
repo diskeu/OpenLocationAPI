@@ -59,6 +59,18 @@ public class UserService {
     }
 
     /**
+     * Gets the user entity via id.
+     * 
+     * @param id the user's id
+     * @return the user entity
+     */
+    User getUserEntityById(final int id) {
+        return userRepository.findById(id)
+            .orElseThrow(UserNotFound::new);
+    }
+
+    /**
+     * 
      * Gets the public user DTO via id.
      *
      * @param id the user's id
@@ -104,6 +116,7 @@ public class UserService {
             currentUserProvider.get().getId()
         );
     }
+
     /**
      * Update the current user.
      * @param UpdateUserRequest the update request
@@ -116,6 +129,7 @@ public class UserService {
                 updateUserRequest.username()
             );
     }
+
     /**
      * Update the user's Password.
      * 
@@ -140,6 +154,7 @@ public class UserService {
         );
         // TODO: send verification email
     }
+
     /**
      * Update the user's email.
      * 
