@@ -50,17 +50,9 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
      * @return the amount of requested elements
      */
     @Query("""
-        SELECT
-            l,
-            2 * 6371 * ASIN(
-                SQRT(
-                    POWER(SIN(RADIANS(l.latitude - :lat)  / 2), 2) +
-                    COS(RADIANS(:lat)) * COS(RADIANS(l.latitude)) *
-                    POWER(SIN(RADIANS(l.longitude - :long) / 2), 2)
-                )
-            ) AS distance
+        SELECT l, haversine(l.latitude, l.longitude, :lat, :long)
         FROM Location l
-        WHERE distance <= :offset
+        WHERE haversine(l.latitude, l.longitude, :lat, :long) <= :offset
     """)
     /* Returning a `Page` would require a count - query which would make the
     finding almost twice as slow. Since you can also get a `Page` behaviour
