@@ -35,7 +35,7 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
      * @param latitude the exact latitude
      * @param longitude the exact longitude
      */
-    Optional<Location> findByLongitudeAndLatitude(
+    Optional<Location> findByLatitudeAndLongitude(
         BigDecimal latitude,
         BigDecimal longitude
     );
