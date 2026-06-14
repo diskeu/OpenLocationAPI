@@ -3,6 +3,8 @@ package dev.timjelenz.openlocationapi.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import dev.timjelenz.openlocationapi.models.UserStarredLocation;
 import dev.timjelenz.openlocationapi.models.embeddables.UserIdLocationId;
@@ -24,4 +26,14 @@ extends JpaRepository<UserStarredLocation, UserIdLocationId> {
      * @return list of `UserStarredLocations` that match the locationId
      */
     List<UserStarredLocation> findById_LocationId(int locationId);
+
+    /**
+     * Deletes UserStarredLocation with the given id.
+     * 
+     * @param id the id to delete
+     * @return the affected rows
+     */
+    @Modifying
+    @Query("DELETE FROM UserStarredLocation usl WHERE usl.id = :id")
+    int deleteByIdIfExists(UserIdLocationId id);
 }
