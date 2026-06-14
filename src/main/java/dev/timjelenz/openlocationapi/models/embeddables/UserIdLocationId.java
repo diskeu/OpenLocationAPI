@@ -4,18 +4,18 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Composite Primary key for `UserId` and `LocationId`.
  */
 @Getter
-@Setter
+@Builder
 @Embeddable
 public class UserIdLocationId implements Serializable {
-    private int userId;
-    private int locationId;
+    private final int userId;
+    private final int locationId;
 
     /**
      * Equals method checks if the given object represents the

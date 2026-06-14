@@ -33,7 +33,7 @@ public class UserStarredLocationService {
      * @return all starred locations from the current user
      */
     public List<UserStarredLocation> getAllUsersStarredLocations() {
-        int id = currentUserProvider.get()
+        final int id = currentUserProvider.get()
             .getId();
         return userStarredLocationRepository.findById_UserId(id);
     }
@@ -44,12 +44,11 @@ public class UserStarredLocationService {
      * @param id location id
      * @return the corresponding `UserIdLocationId`
      */
-    private UserIdLocationId getUserIdLocationId(int id) {
-        UserIdLocationId userIdLocationId = new UserIdLocationId();
-        userIdLocationId.setLocationId(id);
-        userIdLocationId.setUserId(currentUserProvider.get().getId());
-
-        return userIdLocationId;
+    private UserIdLocationId getUserIdLocationId(final int id) {
+        return UserIdLocationId.builder()
+        .userId(currentUserProvider.get().getId())
+        .locationId(id)
+        .build();
     }
 
     /**
@@ -57,7 +56,7 @@ public class UserStarredLocationService {
      *
      * @param id location id
      */
-    private void createUserStarredLocation(int id) {
+    private void createUserStarredLocation(final int id) {
         try {
             userStarredLocationRepository.save(
                 new UserStarredLocation(
@@ -74,7 +73,7 @@ public class UserStarredLocationService {
      * @param id location id 
      * @return if the user has starred the location
      */
-    public boolean hasStarredLocation(int id) {
+    public boolean hasStarredLocation(final int id) {
         return userStarredLocationRepository.existsById(
             getUserIdLocationId(id)
         );
@@ -86,7 +85,7 @@ public class UserStarredLocationService {
      * @param id location id
      */
     @Transactional
-    public void starLocationById(int id) {
+    public void starLocationById(final int id) {
         if (hasStarredLocation(id)) { return; }
         createUserStarredLocation(id);
     }
@@ -97,7 +96,7 @@ public class UserStarredLocationService {
      * @param id location id
      */
     @Transactional
-    public void unstarLocationById(int id) {
+    public void unstarLocationById(final int id) {
         userStarredLocationRepository.deleteById(
             getUserIdLocationId(id)
         );
@@ -110,8 +109,8 @@ public class UserStarredLocationService {
      * @return true if the location is now starred else false
      */
     @Transactional
-    public boolean toggle(int locationId) {
-        UserIdLocationId id = getUserIdLocationId(locationId);
+    public boolean toggle(final int locationId) {
+        final UserIdLocationId id = getUserIdLocationId(locationId);
 
         if (userStarredLocationRepository.deleteByIdIfExists(id) == 0) {
             createUserStarredLocation(locationId);
