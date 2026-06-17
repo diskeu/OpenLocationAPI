@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record ForecastHourWeatherDTO(
-    long lastUpdatedEpoch,
-    LocalDateTime lastUpdated,
+    LocalDateTime date,
+    long dateEpoch,
     short code,
     BigDecimal windKMH,
     BigDecimal windDegree,
