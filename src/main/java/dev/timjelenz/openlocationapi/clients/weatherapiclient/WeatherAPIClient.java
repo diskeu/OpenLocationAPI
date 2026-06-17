@@ -1,18 +1,23 @@
 package dev.timjelenz.openlocationapi.clients.weatherapiclient;
 
-import java.time.Duration;
-
 import org.springframework.stereotype.Component;
 
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.ForecastDayWeatherDTO;
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.ForecastHourWeatherDTO;
+import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherResponseDTO;
+import dev.timjelenz.openlocationapi.dto.requests.DurationRequest;
+import dev.timjelenz.openlocationapi.dto.requests.LocationRequest;
 
 
 @Component
 public interface WeatherAPIClient {
 
-    ForecastHourWeatherDTO getCurrentWeather();
+    WeatherResponseDTO<ForecastHourWeatherDTO> getCurrentWeather(
+        LocationRequest location
+    );
 
-    ForecastDayWeatherDTO getForecastWeather(Duration duration);
+    WeatherResponseDTO<ForecastDayWeatherDTO> getForecastWeather(
+        LocationRequest location, DurationRequest duration
+    );
 
 }
