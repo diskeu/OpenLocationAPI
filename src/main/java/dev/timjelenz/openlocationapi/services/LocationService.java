@@ -1,9 +1,9 @@
 package dev.timjelenz.openlocationapi.services;
 
-import java.awt.print.Pageable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
