@@ -20,7 +20,7 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
-    Location getLocationEntityById(final int locationId) {
+    public Location getLocationEntityById(final int locationId) {
         return locationRepository.findById(locationId)
             .orElseThrow(LocationNotFoundException::new);
     }

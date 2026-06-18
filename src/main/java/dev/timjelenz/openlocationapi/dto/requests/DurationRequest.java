@@ -17,7 +17,7 @@ public record DurationRequest (
             throw new IllegalArgumentException("`From` can't be after `to`");
         }
         Duration diff = Duration.between(from, to);
-        if (diff.toHours() > 7) {
+        if (diff.toDays() > 7) {
             throw new IllegalArgumentException("Diff between `from` and `to` must be <= 7 days.");
         }
     }
