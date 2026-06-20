@@ -4,6 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import dev.timjelenz.openlocationapi.clients.weatherapiclient.deserializer.ForecastDayDeserializer;
+
+@JsonDeserialize(using = ForecastDayDeserializer.class)
 public record ForecastDayWeatherDTO(
    List<ForecastHourWeatherDTO> forecastHourWeather,
 

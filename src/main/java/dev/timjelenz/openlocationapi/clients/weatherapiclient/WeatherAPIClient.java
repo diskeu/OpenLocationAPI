@@ -1,5 +1,7 @@
 package dev.timjelenz.openlocationapi.clients.weatherapiclient;
 
+import java.util.List;
+
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.ForecastDayWeatherDTO;
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.ForecastHourWeatherDTO;
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherResponseDTO;
@@ -12,7 +14,7 @@ public interface WeatherAPIClient {
         Coordinates location
     );
 
-    WeatherResponseDTO<ForecastDayWeatherDTO> getForecastWeather(
+    WeatherResponseDTO<List<ForecastDayWeatherDTO>> getForecastWeather(
         Coordinates location, DurationRequest duration
     );
 

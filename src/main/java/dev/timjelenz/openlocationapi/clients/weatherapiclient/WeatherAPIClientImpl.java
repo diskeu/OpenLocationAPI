@@ -2,27 +2,29 @@ package dev.timjelenz.openlocationapi.clients.weatherapiclient;
 
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.client.RestClient;
-import org.springframework.stereotype.Component;
-
-import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherResponseDTO;
-import dev.timjelenz.openlocationapi.dto.requests.DurationRequest;
-import dev.timjelenz.openlocationapi.models.Location;
-import dev.timjelenz.openlocationapi.services.LocationService;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.ForecastDayWeatherDTO;
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.ForecastHourWeatherDTO;
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherLocationDTO;
+import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherResponseDTO;
+import dev.timjelenz.openlocationapi.dto.requests.Coordinates;
+import dev.timjelenz.openlocationapi.dto.requests.DurationRequest;
 import dev.timjelenz.openlocationapi.exceptions.clients.APIResourceNotFoundException;
 import dev.timjelenz.openlocationapi.exceptions.clients.ServerSideException;
+import dev.timjelenz.openlocationapi.models.Location;
+import dev.timjelenz.openlocationapi.services.LocationService;
 
 @Component
 public class WeatherAPIClientImpl implements WeatherAPIClient {
@@ -44,14 +46,16 @@ public class WeatherAPIClientImpl implements WeatherAPIClient {
         this.objectMapper = objectMapper;
         this.apiKey = apiKey;
     }
+
     /**
      * Gets the current weather by location id.
      * 
      * @param locationId the unique id specifieing the location
      * @return a weather response DTO containing ForecastHourWeatherDTO
      */
-    public WeatherResponseDTO<ForecastHourWeatherDTO> getCurrentWeather(final int locationId) {
-        Location location = locationService.getLocationEntityById(locationId);
+    @Override
+    public WeatherResponseDTO<ForecastHourWeatherDTO> getCurrentWeather(final Coordinates coordinates) {
+        Location location = locationService.getExactLocation(coordinates);
         
         final HashMap<String, String> paramMap = new HashMap<>();
 
@@ -70,18 +74,76 @@ public class WeatherAPIClientImpl implements WeatherAPIClient {
         final WeatherLocationDTO weatherLocationDTO;
 
         try {
+
             forecastHourWeatherDTO = objectMapper.treeToValue(
                 root.path("current"), ForecastHourWeatherDTO.class
             );
+
             weatherLocationDTO = objectMapper.treeToValue(
                 root, WeatherLocationDTO.class
             );
+
         } catch (JsonProcessingException e) {
             throw new ServerSideException("Recieved Json couldn't be decoded.");
         }
+
         return new WeatherResponseDTO<>(
             weatherLocationDTO,
             forecastHourWeatherDTO
+        );
+    }
+
+    /**
+     * Gets forecast weather.
+     * 
+     * @param coordinates coordinates exactly specifing the location
+     * @param duration timespan specifying from which date the weather gets pulled,
+     * rounded down to days
+     * @return a weather response DTO, containing a list of forecastdayweather
+     */
+    @Override
+    public WeatherResponseDTO<List<ForecastDayWeatherDTO>> getForecastWeather(
+        final Coordinates coordinates,
+        final DurationRequest duration
+    ) {
+        final Location location = locationService.getExactLocation(coordinates);
+        final int requestedDays = durationToDays(duration);
+        
+        final HashMap<String, String> paramMap = new HashMap<>();
+        
+        paramMap.put("key", apiKey);
+        paramMap.put("q", location.getLocationName());
+        paramMap.put("days", "%d".formatted(requestedDays));
+        paramMap.put("aqi", "no");
+        paramMap.put("alerts", "no");
+
+        final JsonNode root = retrieveGetRequest(paramMap, "forecast.json").body(JsonNode.class);
+
+        if (root == null) {
+            throw new ServerSideException("Recieved empty Json.");
+        }
+
+        final List<ForecastDayWeatherDTO> forecastDayWeatherDTOs;
+        final WeatherLocationDTO weatherLocationDTO;
+
+        try {
+
+            forecastDayWeatherDTOs = objectMapper.treeToValue(
+                root.path("forecast").path("forecastday"),
+                new TypeReference<List<ForecastDayWeatherDTO>>() { }
+            );
+
+            weatherLocationDTO = objectMapper.treeToValue(
+                root.path("location"), WeatherLocationDTO.class
+            );
+
+        } catch (JsonProcessingException e) {
+            throw new ServerSideException("Recieved Json couldn't be decoded.");
+        }
+
+        return new WeatherResponseDTO<List<ForecastDayWeatherDTO>>(
+            weatherLocationDTO,
+            forecastDayWeatherDTOs
         );
     }
 
