@@ -8,7 +8,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import dev.timjelenz.openlocationapi.dto.LocationDistance;
-import dev.timjelenz.openlocationapi.dto.requests.LocationRequest;
+import dev.timjelenz.openlocationapi.dto.requests.Coordinates;
 import dev.timjelenz.openlocationapi.exceptions.service.location.LocationNotFoundException;
 import dev.timjelenz.openlocationapi.models.Location;
 import dev.timjelenz.openlocationapi.repositories.LocationRepository;
@@ -35,9 +35,9 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
-    public Location getExactLocation(final LocationRequest locationRequest) {
+    public Location getExactLocation(final Coordinates coordinates) {
         return locationRepository.findByLatitudeAndLongitude(
-            locationRequest.lat(), locationRequest.lon()
+            coordinates.lat(), coordinates.lon()
         )
             .orElseThrow(LocationNotFoundException::new);
     }

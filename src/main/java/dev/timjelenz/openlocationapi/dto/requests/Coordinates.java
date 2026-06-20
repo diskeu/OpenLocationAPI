@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotNull;
 
-public record LocationRequest(
+public record Coordinates(
     @NotNull
     BigDecimal lat,
 
     @NotNull
     BigDecimal lon
 ) {
-    public LocationRequest {
+    public Coordinates {
         if (lat.intValue() < 90 || lat.intValue() > -90) {
             throw new IllegalArgumentException("Latitude must be between -90 and 90.");
         }
