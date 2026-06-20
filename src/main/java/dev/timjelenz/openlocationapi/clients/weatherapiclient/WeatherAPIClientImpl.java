@@ -50,7 +50,7 @@ public class WeatherAPIClientImpl implements WeatherAPIClient {
     /**
      * Gets the current weather by location id.
      * 
-     * @param locationId the unique id specifieing the location
+     * @param coordinates coordinates exactly specifying the location
      * @return a weather response DTO containing ForecastHourWeatherDTO
      */
     @Override
@@ -96,7 +96,7 @@ public class WeatherAPIClientImpl implements WeatherAPIClient {
     /**
      * Gets forecast weather.
      * 
-     * @param coordinates coordinates exactly specifing the location
+     * @param coordinates coordinates exactly specifying the location
      * @param duration timespan specifying from which date the weather gets pulled,
      * rounded down to days
      * @return a weather response DTO, containing a list of forecastdayweather
