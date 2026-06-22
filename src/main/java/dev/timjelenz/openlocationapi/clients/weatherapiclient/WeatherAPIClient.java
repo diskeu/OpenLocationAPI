@@ -8,6 +8,9 @@ import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherRespons
 import dev.timjelenz.openlocationapi.dto.requests.Coordinates;
 import dev.timjelenz.openlocationapi.dto.requests.DurationRequest;
 
+/**
+ * Client to interact with an external weather api.
+ */
 public interface WeatherAPIClient {
 
     WeatherResponseDTO<ForecastHourWeatherDTO> getCurrentWeather(
