@@ -1,0 +1,31 @@
+services:
+  sql_server:
+
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+    container_name: sql_server_db
+
+    platform: linux/amd64
+
+    ports:
+      - "1433:1433"
+
+    environment:
+      - ACCEPT_EULA="Y"
+      - MSSQL_USER=${MSSQL_USER}
+      - MSSQL_PASSWORD=${MSSQL_PASSWORD}
+      - SA_PASSWORD=${MSSQL_PASSWORD}
+
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "${MSSQL_USER}", "-P", "${MSSQL_PASSWORD}", "-C", "-Q", "SELECT 1"]
+      interval: 44s
+      timeout: 12s
+      retries: 3
+      start_period: 1m12s
+      start_interval: 24s
+      
+    volumes:
+      - sql_server:/opt/mssql/
+
+volumes:
+  sql_server:
