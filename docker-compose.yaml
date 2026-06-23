@@ -24,8 +24,15 @@ services:
       start_period: 1m12s
       start_interval: 24s
       
+    entrypoint: sh
+
+    command: >
+      -c "chmod +x /usr/local/bin/sqlcmd && exec /opt/mssql/bin/sqlservr"
+
     volumes:
       - sql_server:/opt/mssql/
+      # sqlcmd skript
+      - ./scripts/sqlcmd_executor.sh:/usr/local/bin/sqlcmd
 
 volumes:
   sql_server:
