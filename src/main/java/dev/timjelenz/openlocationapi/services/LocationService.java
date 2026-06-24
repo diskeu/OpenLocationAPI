@@ -31,6 +31,11 @@ public class LocationService {
             .orElseThrow(LocationNotFoundException::new);
     }
 
+    Location getLocationEntityByName(final String name) {
+        return locationRepository.findByLocationName(name)
+            .orElseThrow(LocationNotFoundException::new);
+    }
+
     List<Location> getAllLocations() {
         return locationRepository.findAll();
     }
