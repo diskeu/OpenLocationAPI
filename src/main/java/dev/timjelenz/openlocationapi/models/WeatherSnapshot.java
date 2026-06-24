@@ -3,15 +3,12 @@ package dev.timjelenz.openlocationapi.models;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.Nationalized;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -60,8 +57,7 @@ public class WeatherSnapshot {
             final short humidity,
             final short uv,
             final LocalDateTime sourceLastUpdated,
-            final short apiConditionalCode,
-            final String rawJSON
+            final short apiConditionalCode
     ) {
         this.location = location;
         this.snapshotTime = snapshotTime;
@@ -71,7 +67,6 @@ public class WeatherSnapshot {
         this.uv = uv;
         this.sourceLastUpdated = sourceLastUpdated;
         this.apiConditionalCode = apiConditionalCode;
-        this.rawJSON = rawJSON;
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -117,12 +112,6 @@ public class WeatherSnapshot {
     @Setter
     @Column(nullable = false)
     private short apiConditionalCode;
-
-    @Setter
-    @Lob
-    @Nationalized
-    @Column(nullable = false)
-    private String rawJSON;
 
     /**
      * Sets the snapshotTime before the insert
