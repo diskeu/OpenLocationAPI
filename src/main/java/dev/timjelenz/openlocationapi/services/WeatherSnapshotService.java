@@ -1,7 +1,6 @@
 package dev.timjelenz.openlocationapi.services;
 
-import java.awt.print.Pageable;
-
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,9 @@ public class WeatherSnapshotService {
      *
      * @param weatherResponseDTO the weather to save
      */
-    public void saveSnapshot(final WeatherResponseDTO<ForecastHourWeatherDTO> weatherResponseDTO) {
+    public void saveSnapshot(
+        final WeatherResponseDTO<ForecastHourWeatherDTO> weatherResponseDTO
+    ) {
 
         final ForecastHourWeatherDTO data = weatherResponseDTO.data();
         final WeatherLocationDTO weatherLocation = weatherResponseDTO.weatherLocationDTO();
@@ -69,6 +70,29 @@ public class WeatherSnapshotService {
      * @param pageable 
      * @return list of `WeatherSnapshot` that match the filter 
      */
-    public Slice<WeatherSnapshot> searchSnapshots(WeatherSnapshotSearchFilter filter, Pageable pageable) {
+    public Slice<WeatherSnapshot> searchSnapshots(
+        final WeatherSnapshotSearchFilter filter,
+        final Pageable pageable
+    ) {
+        return weatherSnapshotRepository.search(
+            filter.id(),
+            filter.snapshotTimeMin(),
+            filter.snapshotTimeMax(),
+            filter.localTimeMin(),
+            filter.localTimeMax(),
+            filter.temperatureCMin(),
+            filter.temperatureCMax(),
+            filter.windKMHMin(),
+            filter.windKMHMax(),
+            filter.humidityMin(),
+            filter.humidityMax(),
+            filter.uvMin(),
+            filter.uvMax(),
+            filter.sourceLastUpdatedMin(),
+            filter.sourceLastUpdatedMax(),
+            filter.apiConditionalCodeMin(),
+            filter.apiConditionalCodeMax(),
+            pageable
+        );
     }
 }
