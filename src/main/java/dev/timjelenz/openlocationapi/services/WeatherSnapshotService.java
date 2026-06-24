@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import dev.timjelenz.openlocationapi.clients.ForecastHourWeatherDTO;
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherResponseDTO;
 import dev.timjelenz.openlocationapi.dto.filter.WeatherSnapshotSearchFilter;
+import dev.timjelenz.openlocationapi.exceptions.service.weathersnapshot.WeatherSnapshotNotFoundException;
 import dev.timjelenz.openlocationapi.models.WeatherSnapshot;
 import dev.timjelenz.openlocationapi.repositories.WeatherSnapshotRepository;
 
@@ -27,6 +28,9 @@ public class WeatherSnapshotService {
     }
 
     public WeatherSnapshot getWeatherSnapshotById(final int id) {
+        return weatherSnapshotRepository.findById(id).orElseThrow(
+            WeatherSnapshotNotFoundException::new
+        );
     }
     
     /**
