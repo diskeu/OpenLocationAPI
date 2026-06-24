@@ -30,6 +30,7 @@ public class ForecastHourDeserializer extends JsonDeserializer<ForecastHourWeath
                 : node.path("last_updated_epoch").asLong()
             ),
             (short) node.path("condition").path("code").asInt(),
+            new BigDecimal(node.path("temp_c").asText()),
             new BigDecimal(node.path("wind_kph").asText()),
             new BigDecimal(node.path("wind_degree").asText()),
             (short) node.path("humidity").asInt(),

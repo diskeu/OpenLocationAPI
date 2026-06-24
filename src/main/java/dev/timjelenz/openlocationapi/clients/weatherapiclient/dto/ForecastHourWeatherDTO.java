@@ -12,6 +12,7 @@ public record ForecastHourWeatherDTO(
     LocalDateTime date,
     long dateEpoch,
     short code,
+    BigDecimal temperatureC,
     BigDecimal windKMH,
     BigDecimal windDegree,
     short humidity,
