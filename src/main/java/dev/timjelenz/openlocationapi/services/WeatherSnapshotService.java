@@ -1,15 +1,16 @@
 package dev.timjelenz.openlocationapi.services;
 
 import java.awt.print.Pageable;
-import java.util.List;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import dev.timjelenz.openlocationapi.clients.ForecastHourWeatherDTO;
+import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.ForecastHourWeatherDTO;
+import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherLocationDTO;
 import dev.timjelenz.openlocationapi.clients.weatherapiclient.dto.WeatherResponseDTO;
 import dev.timjelenz.openlocationapi.dto.filter.WeatherSnapshotSearchFilter;
 import dev.timjelenz.openlocationapi.exceptions.service.weathersnapshot.WeatherSnapshotNotFoundException;
+import dev.timjelenz.openlocationapi.models.Location;
 import dev.timjelenz.openlocationapi.models.WeatherSnapshot;
 import dev.timjelenz.openlocationapi.repositories.WeatherSnapshotRepository;
 
@@ -36,9 +37,28 @@ public class WeatherSnapshotService {
     /**
      * Safes the given current weather
      *
-     * @param weatherResponseDTO the weather to safe
+     * @param weatherResponseDTO the weather to save
      */
-    public void safeSnapshot(final WeatherResponseDTO<ForecastHourWeatherDTO> weatherResponseDTO) {
+    public void saveSnapshot(final WeatherResponseDTO<ForecastHourWeatherDTO> weatherResponseDTO) {
+
+        final ForecastHourWeatherDTO data = weatherResponseDTO.data();
+        final WeatherLocationDTO weatherLocation = weatherResponseDTO.weatherLocationDTO();
+        final Location location = locationService.getLocationEntityByName(
+            weatherLocation.name()
+        );
+
+        weatherSnapshotRepository.save(
+            new WeatherSnapshot(
+                location,
+                null,
+                data.temperatureC(),
+                data.windKMH(),
+                data.humidity(),
+                data.uv(),
+                data.date(),
+                data.code()
+            )
+        );
     }
 
     /**
