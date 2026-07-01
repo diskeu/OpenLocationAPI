@@ -12,10 +12,10 @@ public record Coordinates(
     BigDecimal lon
 ) {
     public Coordinates {
-        if (lat.intValue() < 90 || lat.intValue() > -90) {
+        if (lat.intValue() > 90 || lat.intValue() < -90) {
             throw new IllegalArgumentException("Latitude must be between -90 and 90.");
         }
-        if (lon.intValue() < 180 || lon.intValue() > -180) {
+        if (lon.intValue() > 180 || lon.intValue() < -180) {
             throw new IllegalArgumentException("Latitude must be between -180 and 180.");
         }
     }
