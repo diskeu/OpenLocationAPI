@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      MSSQL_USERNAME: sa
+      MSSQL_USER: sa
       MSSQL_PASSWORD: GE53cDfHPqWf
 
     steps:
