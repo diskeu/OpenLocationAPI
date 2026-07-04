@@ -3,6 +3,8 @@ services:
 
     image: mcr.microsoft.com/mssql/server:2022-latest
 
+    user: root
+
     container_name: sql_server_db
 
     platform: linux/amd64
