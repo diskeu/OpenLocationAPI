@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  test-spring-application:
     runs-on: ubuntu-latest
     env:
       MSSQL_USER: sa
@@ -39,4 +39,3 @@ jobs:
 
       - name: package project
         run: mvn package
-          
