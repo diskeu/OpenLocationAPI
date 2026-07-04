@@ -26,6 +26,10 @@ jobs:
 
       - name: start-mssql
         run: docker compose up -d --wait
+
+      - name: add database
+        run: docker exec sql_server_db sqlcmd -Q "CREATE DATABASE openLocationAPI"
+
       - name: package project
         run: mvn package
           
