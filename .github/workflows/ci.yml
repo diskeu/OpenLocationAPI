@@ -28,6 +28,12 @@ jobs:
       - name: start-mssql
         run: docker compose up -d --wait
 
+      - name: debug mssql
+        if: always()
+        run: |
+          docker compose ps
+          docker compose logs
+
       - name: add database
         run: docker exec sql_server_db sqlcmd -Q "CREATE DATABASE openLocationAPI"
 
