@@ -26,7 +26,6 @@ jobs:
 
       - name: start-mssql
         run: docker compose up -d --wait
-          
       - name: package project
         run: mvn package
           
