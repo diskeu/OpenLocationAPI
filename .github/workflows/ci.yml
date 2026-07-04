@@ -12,6 +12,7 @@ jobs:
     env:
       MSSQL_USER: sa
       MSSQL_PASSWORD: GE53cDfHPqWf
+      WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
 
     steps:
       - name: Clone repo
