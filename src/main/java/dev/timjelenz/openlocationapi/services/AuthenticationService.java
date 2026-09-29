@@ -1,10 +1,12 @@
 package dev.timjelenz.openlocationapi.services;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import dev.timjelenz.openlocationapi.exceptions.service.user.InvalidCredentialsException;
 import dev.timjelenz.openlocationapi.models.User;
 
+@Service
 public class AuthenticationService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
