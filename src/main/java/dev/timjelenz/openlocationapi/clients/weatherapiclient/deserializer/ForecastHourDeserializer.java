@@ -18,12 +18,16 @@ public class ForecastHourDeserializer extends JsonDeserializer<ForecastHourWeath
     public ForecastHourWeatherDTO deserialize(final JsonParser p, final DeserializationContext ctx) throws IOException {
         final JsonNode node = p.getCodec().readTree(p);
 
+        /* The weather API returns timestamps with a space instead of
+        the ISO `T` separator, e.g. "2025-01-01 13:00". */
+        final String timestamp = (
+            node.has("time")
+            ? node.path("time").asText()
+            : node.path("last_updated").asText()
+        ).replace(' ', 'T');
+
         return new ForecastHourWeatherDTO(
-            LocalDateTime.parse(
-                node.has("time")
-                ? node.path("time").asText()
-                : node.path("last_updated").asText()
-            ),
+            LocalDateTime.parse(timestamp),
             (
                 node.has("time_epoch")
                 ? node.path("time_epoch").asLong()

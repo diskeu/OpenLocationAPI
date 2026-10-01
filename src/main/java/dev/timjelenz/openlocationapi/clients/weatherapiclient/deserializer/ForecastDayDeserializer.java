@@ -2,7 +2,7 @@ package dev.timjelenz.openlocationapi.clients.weatherapiclient.deserializer;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
@@ -21,9 +21,8 @@ public class ForecastDayDeserializer extends JsonDeserializer<ForecastDayWeather
         final JsonNode node = jp.getCodec().readTree(jp);
         final JsonNode nodeDay = node.path("day");
 
-        List<ForecastHourWeatherDTO> forecastHours = ctx.readValue(
-            node.path("hour")
-                .traverse(jp.getCodec()),
+        List<ForecastHourWeatherDTO> forecastHours = ctx.readTreeAsValue(
+            node.path("hour"),
             ctx.getTypeFactory()
                 .constructCollectionType(
                     List.class,
@@ -33,7 +32,9 @@ public class ForecastDayDeserializer extends JsonDeserializer<ForecastDayWeather
 
         return new ForecastDayWeatherDTO(
             forecastHours,
-            LocalDateTime.parse(node.path("date").asText()),
+            /* The weather API returns the day as "2025-01-01" without
+            a time component. */
+            LocalDate.parse(node.path("date").asText()).atStartOfDay(),
             node.path("date_epoch").asLong(),
             nodeDay.path("condition").path("code").asInt(),
             new BigDecimal(nodeDay.path("maxtemp_c").asText()),
