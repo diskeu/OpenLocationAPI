@@ -47,9 +47,9 @@ class HaversineArgumentsValidator implements ArgumentsValidator {
         final TypeConfiguration typeConfiguration
     ) {
         if (arguments.size() != 4) {
-            throw new IllegalArgumentException("Number of arguments must be 2");
+            throw new IllegalArgumentException("Number of arguments must be 4");
         }
-        for (int i = 0; i <= 4; i++) {
+        for (int i = 0; i < arguments.size(); i++) {
             if (
                 !isNumeric(
                     arguments.get(i)
