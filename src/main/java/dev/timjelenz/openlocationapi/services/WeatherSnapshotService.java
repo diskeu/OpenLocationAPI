@@ -52,6 +52,7 @@ public class WeatherSnapshotService {
             new WeatherSnapshot(
                 location,
                 null,
+                weatherLocation.localTime(),
                 data.temperatureC(),
                 data.windKMH(),
                 data.humidity(),

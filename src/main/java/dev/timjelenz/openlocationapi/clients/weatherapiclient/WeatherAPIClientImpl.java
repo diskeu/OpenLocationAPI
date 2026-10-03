@@ -80,7 +80,7 @@ public class WeatherAPIClientImpl implements WeatherAPIClient {
             );
 
             weatherLocationDTO = objectMapper.treeToValue(
-                root, WeatherLocationDTO.class
+                root.path("location"), WeatherLocationDTO.class
             );
 
         } catch (JsonProcessingException e) {

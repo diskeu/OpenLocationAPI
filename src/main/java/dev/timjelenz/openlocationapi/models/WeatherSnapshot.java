@@ -40,6 +40,7 @@ public class WeatherSnapshot {
      *
      * @param location location of the captured weather in the snapshot
      * @param snapshotTime time when the snapshot was taken
+     * @param localTime local time at the location
      * @param temperatureC temperature (Celcius)
      * @param windKMH wind speed (KMH)
      * @param humidity humidity
@@ -47,11 +48,11 @@ public class WeatherSnapshot {
      * @param sourceLastUpdated when the weather information got updated the
      * last time in the API
      * @param apiConditionalCode conditional code from the API
-     * @param rawJSON raw json of the weather API respone
      */
     public WeatherSnapshot(
             final Location location,
             final LocalDateTime snapshotTime,
+            final LocalDateTime localTime,
             final BigDecimal temperatureC,
             final BigDecimal windKMH,
             final short humidity,
@@ -61,6 +62,7 @@ public class WeatherSnapshot {
     ) {
         this.location = location;
         this.snapshotTime = snapshotTime;
+        this.localTime = localTime;
         this.temperatureC = temperatureC;
         this.windKMH = windKMH;
         this.humidity = humidity;
