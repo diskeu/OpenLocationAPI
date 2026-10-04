@@ -26,17 +26,17 @@ public class LocationService {
             .orElseThrow(LocationNotFoundException::new);
     }
 
-    Location getLocationEntityByIANAName(final String ianaName) {
+    public Location getLocationEntityByIANAName(final String ianaName) {
         return locationRepository.findByIanaName(ianaName)
             .orElseThrow(LocationNotFoundException::new);
     }
 
-    Location getLocationEntityByName(final String name) {
+    public Location getLocationEntityByName(final String name) {
         return locationRepository.findByLocationName(name)
             .orElseThrow(LocationNotFoundException::new);
     }
 
-    List<Location> getAllLocations() {
+    public List<Location> getAllLocations() {
         return locationRepository.findAll();
     }
 
