@@ -1,31 +1,15 @@
 package dev.timjelenz.openlocationapi.jpafunctions;
 
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Locale;
 
-import org.hibernate.metamodel.mapping.BasicValuedMapping;
 import org.hibernate.query.sqm.function.FunctionKind;
 import org.hibernate.query.sqm.function.PatternBasedSqmFunctionDescriptor;
 import org.hibernate.query.sqm.produce.function.ArgumentsValidator;
-import org.hibernate.query.sqm.produce.function.FunctionReturnTypeResolver;
+import org.hibernate.query.sqm.produce.function.StandardFunctionReturnTypeResolvers;
 import org.hibernate.query.sqm.produce.function.internal.PatternRenderer;
 import org.hibernate.query.sqm.tree.SqmTypedNode;
-import org.hibernate.sql.ast.tree.SqlAstNode;
 import org.hibernate.type.spi.TypeConfiguration;
-
-/**
- * Basic ReturnTypeResolver.
- */
-class ReturnTypeResolver implements FunctionReturnTypeResolver {
-
-    @Override
-    public BasicValuedMapping resolveFunctionReturnType(
-        final Supplier<BasicValuedMapping> supplier,
-        final List<? extends SqlAstNode> arguments
-    ) {
-        return supplier.get();
-    }
-}
 
 /**
  * Basic ArgumentsValidator, allows only numeric types.
@@ -33,9 +17,18 @@ class ReturnTypeResolver implements FunctionReturnTypeResolver {
 class HaversineArgumentsValidator implements ArgumentsValidator {
 
     private boolean isNumeric(final String typeName) {
+        if (typeName == null) {
+            return true;
+        }
 
-        return switch (typeName.toLowerCase()) {
-            case "integer", "int", "long", "double", "bigdecimal", "numeric", "decimal" -> true;
+        final String simpleName = typeName
+            .substring(typeName.lastIndexOf('.') + 1)
+            .replace("_", "")
+            .toLowerCase(Locale.ROOT);
+
+        return switch (simpleName) {
+            case "byte", "short", "integer", "int", "long", "float", "double",
+                "bigdecimal", "biginteger", "numeric", "decimal", "real" -> true;
             default -> false;
         };
     }
@@ -50,14 +43,14 @@ class HaversineArgumentsValidator implements ArgumentsValidator {
             throw new IllegalArgumentException("Number of arguments must be 4");
         }
         for (int i = 0; i < arguments.size(); i++) {
-            if (
-                !isNumeric(
-                    arguments.get(i)
-                        .getNodeType()
-                        .getTypeName()
-                )
-            ) {
-                throw new IllegalArgumentException("Arguments can only");
+            final var nodeType = arguments.get(i).getNodeType();
+            final String typeName = nodeType != null
+                ? nodeType.getTypeName()
+                : null;
+            if (!isNumeric(typeName)) {
+                throw new IllegalArgumentException(
+                    "Arguments must be numeric, got: " + typeName
+                );
             }
         }
     }
@@ -84,7 +77,7 @@ public class HaversineFunctionDescriptor extends PatternBasedSqmFunctionDescript
         super(
             new PatternRenderer(HAVERSINEFORMULAPATTERN),
             new HaversineArgumentsValidator(),
-            new ReturnTypeResolver(),
+            StandardFunctionReturnTypeResolvers.useArgType(1),
             null,
             "haversine",
             FunctionKind.NORMAL,
