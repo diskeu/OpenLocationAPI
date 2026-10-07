@@ -63,7 +63,7 @@ public class WeatherAPIClientImpl implements WeatherAPIClient {
         paramMap.put("q", location.getLocationName());
         paramMap.put("aqi", "no");
 
-        JsonNode root = retrieveGetRequest(paramMap, "forecast/json/")
+        JsonNode root = retrieveGetRequest(paramMap, "current.json")
             .body(JsonNode.class);
 
         if (root == null) {
