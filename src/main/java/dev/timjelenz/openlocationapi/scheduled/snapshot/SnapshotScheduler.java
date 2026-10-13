@@ -23,7 +23,7 @@ public class SnapshotScheduler {
         this.cachedLocations = locationService.getAllLocations();
     }
 
-    @Scheduled(fixedRate = 84_000_000)
+    @Scheduled(fixedRate = 8_640_000)
     public void safeSnapshots() {
         for (Location location : cachedLocations) {
             requestSaveSnapshot.requestWeatherAPI(
