@@ -1,37 +1,43 @@
 package dev.timjelenz.openlocationapi.scheduled.snapshot;
 
-import java.util.List;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import dev.timjelenz.openlocationapi.dto.requests.Coordinates;
 import dev.timjelenz.openlocationapi.models.Location;
 import dev.timjelenz.openlocationapi.services.LocationService;
 
+/**
+ * Periodically requests the current weather for all known locations and
+ * stores it as a weather snapshot.
+ */
 @Component
 public class SnapshotScheduler {
 
+    /**
+     * Interval between two snapshot runs (24 hours).
+     */
+    public static final long SNAPSHOT_INTERVAL_MS = 86_400_000L;
+
     private final RequestSaveSnapshot requestSaveSnapshot;
-    private final List<Location> cachedLocations;
+    private final LocationService locationService;
 
     public SnapshotScheduler(
         final RequestSaveSnapshot requestSaveSnapshot,
         final LocationService locationService
     ) {
         this.requestSaveSnapshot = requestSaveSnapshot;
-        this.cachedLocations = locationService.getAllLocations();
+        this.locationService = locationService;
     }
 
-    @Scheduled(fixedRate = 8_640_000)
-    public void safeSnapshots() {
-        for (Location location : cachedLocations) {
-            requestSaveSnapshot.requestWeatherAPI(
-                new Coordinates(
-                    location.getLatitude(),
-                    location.getLongitude()
-                )
-            );
+    /**
+     * Requests the current weather for every location currently stored in the
+     * database. Locations are loaded on every run so that locations added
+     * after startup are included.
+     */
+    @Scheduled(fixedRate = SNAPSHOT_INTERVAL_MS)
+    public void saveSnapshots() {
+        for (Location location : locationService.getAllLocations()) {
+            requestSaveSnapshot.requestWeatherAPI(location);
         }
     }
 }

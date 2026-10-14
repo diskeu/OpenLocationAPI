@@ -34,19 +34,47 @@ public class WeatherSnapshotService {
     }
     
     /**
-     * Safes the given current weather
+     * Saves the given current weather for the location identified by its
+     * response name.
      *
      * @param weatherResponseDTO the weather to save
      */
     public void saveSnapshot(
         final WeatherResponseDTO<ForecastHourWeatherDTO> weatherResponseDTO
     ) {
-
-        final ForecastHourWeatherDTO data = weatherResponseDTO.data();
-        final WeatherLocationDTO weatherLocation = weatherResponseDTO.weatherLocationDTO();
+        final WeatherLocationDTO weatherLocation =
+            weatherResponseDTO.weatherLocationDTO();
         final Location location = locationService.getLocationEntityByName(
             weatherLocation.name()
         );
+
+        saveSnapshot(location, weatherResponseDTO);
+    }
+
+    /**
+     * Saves the given current weather for the location with the given id.
+     *
+     * @param locationId id of the location the snapshot belongs to
+     * @param weatherResponseDTO the weather to save
+     */
+    public void saveSnapshot(
+        final int locationId,
+        final WeatherResponseDTO<ForecastHourWeatherDTO> weatherResponseDTO
+    ) {
+        final Location location = locationService.getLocationEntityById(
+            locationId
+        );
+
+        saveSnapshot(location, weatherResponseDTO);
+    }
+
+    private void saveSnapshot(
+        final Location location,
+        final WeatherResponseDTO<ForecastHourWeatherDTO> weatherResponseDTO
+    ) {
+        final ForecastHourWeatherDTO data = weatherResponseDTO.data();
+        final WeatherLocationDTO weatherLocation =
+            weatherResponseDTO.weatherLocationDTO();
 
         weatherSnapshotRepository.save(
             new WeatherSnapshot(
