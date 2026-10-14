@@ -14,9 +14,14 @@ import dev.timjelenz.openlocationapi.services.LocationService;
 public class SnapshotScheduler {
 
     /**
-     * Interval between two snapshot runs (24 hours).
+     * Snapshot CRON expression for a daily run at 00:44.
      */
-    public static final long SNAPSHOT_INTERVAL_MS = 86_400_000L;
+    public static final String SNAPSHOT_CRON_EXPR = "0 44 0 * * ?";
+
+    /**
+     * Time zone used by the snapshot CRON expression.
+     */
+    public static final String SNAPSHOT_CRON_ZONE = "Europe/Vienna";
 
     private final RequestSaveSnapshot requestSaveSnapshot;
     private final LocationService locationService;
@@ -34,7 +39,7 @@ public class SnapshotScheduler {
      * database. Locations are loaded on every run so that locations added
      * after startup are included.
      */
-    @Scheduled(fixedRate = SNAPSHOT_INTERVAL_MS)
+    @Scheduled(cron = SNAPSHOT_CRON_EXPR, zone = SNAPSHOT_CRON_ZONE)
     public void saveSnapshots() {
         for (Location location : locationService.getAllLocations()) {
             requestSaveSnapshot.requestWeatherAPI(location);

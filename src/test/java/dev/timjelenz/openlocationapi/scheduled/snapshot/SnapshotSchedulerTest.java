@@ -58,16 +58,21 @@ class SnapshotSchedulerTest {
     }
 
     @Test
-    void schedulesSnapshotsEveryTwentyFourHours() throws NoSuchMethodException {
+    void schedulesSnapshotsDailyAt0044InVienna()
+        throws NoSuchMethodException {
         final Scheduled scheduled = SnapshotScheduler.class
             .getMethod("saveSnapshots")
             .getAnnotation(Scheduled.class);
 
         assertThat(scheduled).isNotNull();
-        assertThat(scheduled.fixedRate())
-            .isEqualTo(SnapshotScheduler.SNAPSHOT_INTERVAL_MS);
-        assertThat(SnapshotScheduler.SNAPSHOT_INTERVAL_MS)
-            .isEqualTo(86_400_000L);
+        assertThat(SnapshotScheduler.SNAPSHOT_CRON_EXPR)
+            .isEqualTo("0 44 0 * * ?");
+        assertThat(SnapshotScheduler.SNAPSHOT_CRON_ZONE)
+            .isEqualTo("Europe/Vienna");
+        assertThat(scheduled.cron())
+            .isEqualTo(SnapshotScheduler.SNAPSHOT_CRON_EXPR);
+        assertThat(scheduled.zone())
+            .isEqualTo(SnapshotScheduler.SNAPSHOT_CRON_ZONE);
     }
 
     private Location location(
