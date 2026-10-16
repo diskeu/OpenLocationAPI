@@ -121,23 +121,25 @@ public class UserService {
      * Deletes the current user.
      */
     public void deleteUser() {
-        currentUserProvider.get();
-        userRepository.deleteById(
-            currentUserProvider.get().getId()
-        );
+        final User user = currentUserProvider.get();
+        userRepository.deleteById(user.getId());
     }
 
     /**
      * Update the current user.
-     * @param UpdateUserRequest the update request
+     *
+     * @param updateUserRequest the update request
      */
     @Transactional
-    public void updateUser(final UpdateUserAppereanceRequest updateUserRequest) { 
+    public void updateUser(final UpdateUserAppereanceRequest updateUserRequest) {
+        final User user = currentUserProvider.get();
+        final User dbUser = userRepository.findById(user.getId())
+            .orElseThrow(UserNotFoundException::new);
+
         // Relevant if more fields to the user get added
-        currentUserProvider.get()
-            .setUserName(
-                updateUserRequest.username()
-            );
+        dbUser.setUserName(
+            updateUserRequest.username()
+        );
     }
 
     /**
