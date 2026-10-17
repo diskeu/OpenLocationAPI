@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -23,6 +24,7 @@ import dev.timjelenz.openlocationapi.dto.responses.user.PrivateUserResponse;
 import dev.timjelenz.openlocationapi.dto.responses.user.PublicUserResponse;
 import dev.timjelenz.openlocationapi.services.UserService;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 

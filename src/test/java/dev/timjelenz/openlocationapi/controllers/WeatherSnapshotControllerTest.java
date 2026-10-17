@@ -15,6 +15,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ import dev.timjelenz.openlocationapi.models.Location;
 import dev.timjelenz.openlocationapi.models.WeatherSnapshot;
 import dev.timjelenz.openlocationapi.services.WeatherSnapshotService;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(WeatherSnapshotController.class)
 class WeatherSnapshotControllerTest {
 
