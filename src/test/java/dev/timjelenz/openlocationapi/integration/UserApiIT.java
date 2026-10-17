@@ -129,4 +129,71 @@ class UserApiIT extends AbstractApiIntegrationTest {
             .isEqualTo(MediaType.APPLICATION_PROBLEM_JSON);
         assertThat(response.getBody()).contains("User not found");
     }
+
+    @Test
+    void rejectsDuplicateEmail() {
+        restTemplate.postForEntity(
+            "/api/users",
+            new CreateUserRequest(
+                "alice",
+                "shared@example.com",
+                "Password1"
+            ),
+            String.class
+        );
+
+        final ResponseEntity<String> duplicate =
+            restTemplate.postForEntity(
+                "/api/users",
+                new CreateUserRequest(
+                    "bobby",
+                    "shared@example.com",
+                    "Password1"
+                ),
+                String.class
+            );
+
+        assertThat(duplicate.getStatusCode())
+            .isEqualTo(HttpStatus.CONFLICT);
+        assertThat(duplicate.getHeaders().getContentType())
+            .isEqualTo(MediaType.APPLICATION_PROBLEM_JSON);
+        assertThat(duplicate.getBody()).contains("existing data");
+    }
+
+    @Test
+    void rejectsInvalidEmail() {
+        final ResponseEntity<String> response = restTemplate.postForEntity(
+            "/api/users",
+            new CreateUserRequest(
+                "alice",
+                "not-an-email",
+                "Password1"
+            ),
+            String.class
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getHeaders().getContentType())
+            .isEqualTo(MediaType.APPLICATION_PROBLEM_JSON);
+        assertThat(response.getBody())
+            .contains("\"errors\"")
+            .contains("email");
+    }
+
+    @Test
+    void doesNotExposePasswordHashInPublicProfile() {
+        final User user = createUser("alice", "alice@example.com");
+
+        final ResponseEntity<String> response = restTemplate.getForEntity(
+            "/api/users/{id}",
+            String.class,
+            user.getId()
+        );
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody())
+            .doesNotContain("userPasswordHash")
+            .doesNotContain("$2")
+            .doesNotContain("alice@example.com");
+    }
 }

@@ -31,6 +31,10 @@ public class UserStarredLocation {
     public UserStarredLocation(final User user, final Location location) {
         this.user = user;
         this.location = location;
+        this.id = UserIdLocationId.builder()
+            .userId(user.getId())
+            .locationId(location.getId())
+            .build();
     }
 
     @EmbeddedId
