@@ -12,6 +12,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import dev.timjelenz.openlocationapi.exceptions.clients.APIResourceNotFoundException;
@@ -188,6 +189,19 @@ public class ApiExceptionHandler {
             : "Invalid request";
 
         return problem(HttpStatus.BAD_REQUEST, detail);
+    }
+
+    /**
+     * Handles authentication failures.
+     *
+     * @param exception the thrown exception
+     * @return a 401 problem response
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ProblemDetail handleAuthentication(
+        final AuthenticationException exception
+    ) {
+        return problem(HttpStatus.UNAUTHORIZED, "Invalid credentials");
     }
 
     private static ProblemDetail problem(
