@@ -7,6 +7,6 @@ public record PublicUserResponse(
     String userName
 ) {
     public PublicUserResponse(User user) {
-        this(user.getId(), user.getUserName());
+        this(user.getId(), user.getUsername());
     }
 }

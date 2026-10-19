@@ -8,6 +8,6 @@ public record PrivateUserResponse(
     String userEmail
 ) {
     public PrivateUserResponse(User user) {
-        this(user.getId(), user.getUserName(), user.getUserEmail());
+        this(user.getId(), user.getUsername(), user.getUserEmail());
     }
 }

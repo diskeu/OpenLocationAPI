@@ -49,7 +49,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
         final User alice = registerAlice("Password1");
 
         final ResponseEntity<PrivateUserResponse> response =
-            restTemplate.getForEntity(
+            restTemplate.withBasicAuth("alice", "Password1").getForEntity(
                 "/api/users/me",
                 PrivateUserResponse.class
             );
@@ -68,7 +68,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void updatesCurrentUserName() {
         registerAlice("Password1");
 
-        final ResponseEntity<Void> response = restTemplate.exchange(
+        final ResponseEntity<Void> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me",
             HttpMethod.PUT,
             new HttpEntity<>(new UpdateUserAppereanceRequest("alice2")),
@@ -84,7 +84,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void updatesCurrentUserPassword() {
         final User alice = registerAlice("Password1");
 
-        final ResponseEntity<Void> response = restTemplate.exchange(
+        final ResponseEntity<Void> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/password",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -107,7 +107,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void updatesCurrentUserEmail() {
         final User alice = registerAlice("Password1");
 
-        final ResponseEntity<Void> response = restTemplate.exchange(
+        final ResponseEntity<Void> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/email",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -127,7 +127,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void deletesCurrentUser() {
         registerAlice("Password1");
 
-        final ResponseEntity<Void> response = restTemplate.exchange(
+        final ResponseEntity<Void> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me",
             HttpMethod.DELETE,
             HttpEntity.EMPTY,
@@ -158,7 +158,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
         assertThat(userStarredLocationRepository.findById(starredId))
             .isPresent();
 
-        final ResponseEntity<Void> response = restTemplate.exchange(
+        final ResponseEntity<Void> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me",
             HttpMethod.DELETE,
             HttpEntity.EMPTY,
@@ -175,7 +175,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsWrongCurrentPasswordForPasswordChange() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/password",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -195,7 +195,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsSamePassword() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/password",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -214,7 +214,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsWrongCurrentPasswordForEmailChange() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/email",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -234,7 +234,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsSameEmail() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/email",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -253,7 +253,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsDuplicateUserNameOnUpdate() {
         registerAlice("Password1");
         final ResponseEntity<PublicUserResponse> bob =
-            restTemplate.postForEntity(
+            restTemplate.withBasicAuth("alice", "Password1").postForEntity(
                 "/api/users",
                 new CreateUserRequest(
                     "bobby",
@@ -264,7 +264,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
             );
         assertThat(bob.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me",
             HttpMethod.PUT,
             new HttpEntity<>(new UpdateUserAppereanceRequest("bobby")),
@@ -282,7 +282,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsInvalidCurrentUserName() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me",
             HttpMethod.PUT,
             new HttpEntity<>(new UpdateUserAppereanceRequest(" ")),
@@ -299,7 +299,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsWeakNewPassword() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/password",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -318,7 +318,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void rejectsInvalidNewEmail() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.exchange(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").exchange(
             "/api/users/me/email",
             HttpMethod.PUT,
             new HttpEntity<>(
@@ -337,7 +337,7 @@ class UserMeApiIT extends AbstractApiIntegrationTest {
     void doesNotExposePasswordHashInPrivateProfile() {
         registerAlice("Password1");
 
-        final ResponseEntity<String> response = restTemplate.getForEntity(
+        final ResponseEntity<String> response = restTemplate.withBasicAuth("alice", "Password1").getForEntity(
             "/api/users/me",
             String.class
         );
