@@ -1,6 +1,7 @@
 package dev.timjelenz.openlocationapi.controllers;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
@@ -109,11 +110,11 @@ public class LocationController {
     public SliceResponse<LocationDistanceResponse> findNearby(
         @RequestParam("lat")
         @DecimalMin("-90") @DecimalMax("90")
-        final BigDecimal lat,
+        BigDecimal lat,
 
         @RequestParam("lon")
         @DecimalMin("-180") @DecimalMax("180")
-        final BigDecimal lon,
+        BigDecimal lon,
 
         @RequestParam("radiusKm")
         @DecimalMin("0")
@@ -127,6 +128,11 @@ public class LocationController {
         @Min(1) @Max(100)
         final int size
     ) {
+        /* Sql servers substraction problematic leads to more accurate values
+        when there are more decimal places. Quick and easy fix */
+        lat = lat.setScale(6, RoundingMode.HALF_UP);
+        lon = lon.setScale(6, RoundingMode.HALF_UP);
+
         final Coordinates coordinates = new Coordinates(lat, lon);
         final Slice<LocationDistance> locations = locationService.findNearby(
             coordinates.lat(),
