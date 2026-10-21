@@ -49,10 +49,13 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
      * @param pageable return only the requested item amount in the pageable
      * @return the amount of requested elements
      */
+    /* due hibernate alias problems this requires 3 identical haversine calculations
+    in one select query but modern db engines are probably able to optimize this */
     @Query("""
-        SELECT l, haversine(l.latitude, l.longitude, :lat, :long)
+        SELECT l, haversine(l.latitude, l.longitude, :lat, :long) AS d
         FROM Location l
         WHERE haversine(l.latitude, l.longitude, :lat, :long) <= :offset
+        ORDER BY haversine(l.latitude, l.longitude, :lat, :long)
     """)
     /* Returning a `Page` would require a count - query which would make the
     finding almost twice as slow. Since you can also get a `Page` behaviour
