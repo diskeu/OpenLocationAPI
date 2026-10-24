@@ -20,6 +20,26 @@ spring:
     baseline-on-migrate: true
     locations: classpath:db/migration
 
+  ai:
+    retry:
+      max-attempts: 3
+      backoff:
+        initial-interval: 1s
+        multiplier: 2
+        max-interval: 5s
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      chat:
+        options:
+          model: ${OLLAMA_MODEL:devstral-small-2}
+          temperature: 0.15
+          num-ctx: 8192
+          num-predict: 1024
+          internal-tool-execution-enabled: true
+          keep-alive: 30m
+      init:
+        pull-model-strategy: never
+
   server:
     port: 8080
   

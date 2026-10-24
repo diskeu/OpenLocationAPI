@@ -89,6 +89,7 @@ public class SecurityConfig {
                 .requestMatchers("/webjars/**").permitAll()
                 .requestMatchers("/api/locations/**").permitAll()
                 .requestMatchers("/api/snapshots/**").permitAll()
+                .requestMatchers("/api/ai/weather/**").authenticated()
                 .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated()
             )

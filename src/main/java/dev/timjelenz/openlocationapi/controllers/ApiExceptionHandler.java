@@ -3,16 +3,19 @@ package dev.timjelenz.openlocationapi.controllers;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.ai.retry.NonTransientAiException;
+import org.springframework.ai.retry.TransientAiException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import dev.timjelenz.openlocationapi.exceptions.clients.APIResourceNotFoundException;
@@ -143,6 +146,26 @@ public class ApiExceptionHandler {
         final ServerSideException exception
     ) {
         return problem(HttpStatus.BAD_GATEWAY, "Upstream service error");
+    }
+
+    /**
+     * Handles an unavailable upstream service, such as the AI provider.
+     *
+     * @param exception the thrown exception
+     * @return a 503 problem response
+     */
+    @ExceptionHandler({
+        ResourceAccessException.class,
+        NonTransientAiException.class,
+        TransientAiException.class
+    })
+    public ProblemDetail handleUpstreamUnavailable(
+        final RuntimeException exception
+    ) {
+        return problem(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            "Upstream service is unavailable"
+        );
     }
 
     /**
