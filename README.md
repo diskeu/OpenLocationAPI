@@ -2,7 +2,8 @@
 
 OpenLocationAPI is a Spring Boot backend application that allows users to track weather data for saved locations,
 search historical weather snapshots (a feature often missing from conventional weather apps), and access a 7-day weather forecast.
-
+<img width="3456" height="1990" alt="image" src="https://github.com/user-attachments/assets/a9cdffa7-0ec1-4534-a500-04547c94a30d" />
+**OpenLocationAPI tested with vibe coded frontend by passing deepseek the swagger ui documentation**
 ## Database
 The default database engine is `Microsoft SQL Server` but through hibernates dialect it can be easily switched to another engine.
 - There is also a docker compose file available to easily set up a MSSQL.
