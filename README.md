@@ -62,4 +62,4 @@ It uses JSON with `Jackson` for data exchange.
 - the location search and snapshot endpoints support pagination
 
 ### API Documentation
-Interactive API documentation is available through Swagger UI (Port
+Interactive API documentation is available through Swagger UI (http://localhost:8080/swagger-ui/index.html#/)
