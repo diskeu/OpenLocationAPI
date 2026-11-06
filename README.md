@@ -13,6 +13,12 @@ If you want to execute sql in docker, there is already a small shell script moun
 Normally you would have to type `/opt/mssql-tools18/bin/sqlcmd -S localhost -U $MSSQL_USER -P $MSSQL_PASSWORD -C ...`
 to just execute a query. With the Script, just type `sqlcmd {Query}`.
 
+## Spring AI Integration
+Under the `ai/weather/` endpoint, you can chat with an integrated AI that retrieves real-time weather data through OpenLocationAPI
+using Spring AI’s tool-calling loop.
+The default model is devstral-small-2, running locally via Ollama. It can easily be switched to any other provider supported by
+Spring AI. (Can be easily swapped to another provider if spring-ai supports it)
+
 ## Underlying API
 To get the weather data the Backend uses the free [Weather API](https://www.weatherapi.com/).
 
@@ -48,11 +54,13 @@ It uses JSON with `Jackson` for data exchange.
 | GET | `/api/locations/{locationId}/weather/forecast` | Get weather forecast |
 | GET | `/api/snapshots` | Search and filter weather snapshots |
 | GET | `/api/snapshots/{id}` | Get snapshot by ID |
+| GET | `/api/ai/weather/chat` | Chat with the integrated AI |
 
 ### Features
 
 - User registration and authentication
 - User profile managment
+- Integrated AI tooling, LLM answers weather-related questions using provided tools.
 - Ability to update password email and username
 - Location search and discovery
 - Nearby location search using haversine function directly implemented into the sql query
